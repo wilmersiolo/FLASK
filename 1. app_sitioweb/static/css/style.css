@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #d32233; /* Red background */
+    color: white;
+    text-align: center;
+    padding: 50px;
+    margin: 0;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+h2 {
+    font-size: 32px;
+    font-weight: bold;
+}
+.description {
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+.button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #71143d; /* Dark red button background */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+.button img {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+}
+.navbar-nav .nav-link:hover {
+    background-color: white;
+    color: black !important;
+    transition: background-color 0.1s;
+}
