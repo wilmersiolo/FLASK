@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block titulo %} Juegos {% endblock %}
+{% block contenido %}
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-10">
+            <h3 class="h3">Juegos</h3>
+            <a href="{{ url_for('formulario_agregar_juego') }}" class="btn btn-success mb-3">Agregar   <i class="bi bi-plus-square"></i></a>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Detalles</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for juego in juegos %}
+                        <tr>
+                            <td>{{ juego[1] }}</td>
+                            <td>{{ juego[2] }}</td>
+                            <td>{{ juego[3] }}</td>
+                            <td>
+                                <a class="btn btn-secondary btn-sm" style="width: 89px;"><i class="bi bi-eye-fill"></i></a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('editar_juego', id=juego[0]) }}" class="btn btn-primary btn-sm" style="width: 89px;"><i class="bi bi-pencil-fill"></i>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('eliminar_juego') }}" method="POST" class="d-inline">
+                                    <input type="hidden" name="id" value="{{ juego[0] }}">
+                                    <button class="btn btn-danger btn-sm" style="width: 89px;" ><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

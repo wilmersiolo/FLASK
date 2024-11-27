@@ -1,0 +1,74 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    color: #333; /* Ajusta según la paleta de colores */
+    padding-top: 150px; /* Ajusta según la altura del navbar */
+}
+
+h1, h2, h3, .navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #ffffff; /* Ejemplo para títulos en blanco */
+}
+
+.nav-link {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Títulos un poco más destacados */
+}
+
+/* Efecto hover para el botón */
+.btn-hover {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-hover:hover {
+    transform: scale(1.1); /* Incrementa ligeramente el tamaño */
+    background-color: #343a40; /* Mantén el color oscuro o cámbialo si lo deseas */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: white;
+    color: black !important;
+    transition: background-color 0.1s;
+}
+
+/* Efecto hover para los botones */
+.btn-hover {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-hover:hover {
+    transform: scale(1.1); /* Incrementa ligeramente el tamaño */
+    filter: brightness(1.1); /* Hace el color más brillante */
+    color: #ffffff;
+    background-color: #ffffff;
+}
+
+.btn-custom {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #000000; /* Texto negro */
+    border: 1px solid #000000; /* Opcional: borde negro */
+}
+
+.btn-custom:hover {
+    background-color: #f8f9fa; /* Fondo ligeramente gris al pasar el mouse */
+    color: #000000; /* Texto negro */
+}
+
+
+  
+  
+  
+
