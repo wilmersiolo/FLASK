@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block titulo %} | Mc Donald's {% endblock %}
+{% block contenido %}
+    <!-- Spinner de carga -->
+    <div id="loadingOverlay">
+        <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <!-- Carrusel de banners -->
+    <div id="carouselExampleCaptions" class="carousel slide mt-5" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Primer banner -->
+            <div class="carousel-item active">
+                <img src="static/img/mcdonalds-banner-1.jpg" class="d-block w-100" alt="Hamburguesas">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 class="carousel-title">Disfruta nuestras Hamburguesas</h5>
+                    <p class="carousel-text">Sabor único, elige la tuya hoy mismo</p>
+                </div>
+            </div>
+            <!-- Segundo banner -->
+            <div class="carousel-item">
+                <img src="static/img/mcdonalds-banner-2.jpg" class="d-block w-100" alt="Ofertas Especiales">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 class="carousel-title">¡Ofertas Especiales!</h5>
+                    <p class="carousel-text">Precios increíbles en tu comida favorita.</p>
+                </div>
+            </div>
+            <!-- Tercer banner -->
+            <div class="carousel-item">
+                <img src="static/img/mcdonalds-banner-3.jpg" class="d-block w-100" alt="Nuevo Menú">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 class="carousel-title">¡Nuevo Menú!</h5>
+                    <p class="carousel-text">Descubre nuevos sabores y disfruta del mejor fast food.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Controles del carrusel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">¡Ofertas Especiales!</h1>
+        
+        <!-- Sección de Carrusel de productos -->
+        <div id="productoCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner" id="carouselProductos"></div>
+            <button class="carousel-control-prev btn-carousel-prev" type="button" data-bs-target="#productoCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next btn-carousel-next" type="button" data-bs-target="#productoCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <!-- Modal del Carrito -->
+    <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Encabezado con fondo McDonald's -->
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fw-bold" id="modalCarritoLabel">🛒 Tu Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- Cuerpo del modal -->
+                <div class="modal-body">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-danger">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Precio</th>
+                                <th class="text-center">Subtotal</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCarrito">
+                            <!-- Aquí se mostrarán los productos -->
+                        </tbody>
+                    </table>
+                    
+                    <!-- Total del pedido -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <h4 class="text-end fw-bold">Total: $<span id="totalCarrito">0.00</span></h4>
+                    </div>
+                </div>
+
+                <!-- Footer con botones -->
+                <div class="modal-footer d-flex justify-content-between">
+                    <button class="btn btn-danger fw-bold px-4" onclick="vaciarCarrito()">🗑 Vaciar Carrito</button>
+                    <button type="button" class="btn btn-secondary fw-bold px-4" data-bs-dismiss="modal">❌ Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección con dos cards -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">¡No te lo pierdas!</h2>
+        <div class="row justify-content-center">
+            <!-- Card 1: Pide a casa o recoge en el restaurante -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg" style="border-radius: 15px;">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <img src="static/img/card-4.jpg" class="img-fluid rounded-start" alt="Pide a casa">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pide a Casa o Recoge en el Restaurante</h5>
+                        <p class="card-text">Disfruta de la comodidad de pedir desde tu casa o recoge tu pedido en el restaurante que prefieras. ¡Tú eliges!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Descuentos por registrarse -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg" style="border-radius: 15px;">
+                    <div class="row g-0">
+                        <div class="col-md-12">
+                            <img src="static/img/card-5.jpg" class="img-fluid rounded-start" alt="Descuentos">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Grandes Descuentos Solo por Registrarte</h5>
+                        <p class="card-text">Al registrarte en nuestra página, obtendrás descuentos exclusivos y beneficios especiales. ¡Regístrate hoy mismo!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de preguntas frecuentes -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">¿Necesitas alguna razón más?</h2>
+
+        <div class="accordion" id="accordionExample">
+            <!-- Pregunta 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        ¿Por qué elegirnos?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Porque ofrecemos productos de la mejor calidad, con un servicio rápido y eficiente. ¡Lo que necesitas en el momento justo!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        ¿Tienen opciones vegetarianas?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Sí, contamos con opciones vegetarianas y saludables para que todos puedan disfrutar de nuestras deliciosas opciones.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        ¿Puedo hacer un pedido a domicilio?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        ¡Claro! Ofrecemos servicio de entrega a domicilio para que disfrutes de nuestras delicias sin salir de casa.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        ¿Cuáles son los horarios de atención?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Estamos disponibles todos los días, de 10:00 AM a 10:00 PM. ¡Ven y disfruta cuando más te apetezca!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        ¿Cómo puedo obtener descuentos?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Solo por registrarte en nuestra web podrás recibir descuentos exclusivos. ¡Así que no dudes en aprovechar esta oferta!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Registro -->
+    <div class="container-fluid bg-warning p-5">
+        <div class="row align-items-center">
+            <!-- Texto en 8 columnas -->
+            <div class="col-md-8 text-center text-md-start mb-3 mb-md-0">
+                <h2 class="text-white">Regístrate y disfruta de la experiencia completa:</h2>
+                <p class="text-white">Ofertas, descuentos, compras y muchas, muchas sorpresas. ¡No te lo puedes perder!</p>
+            </div>
+            
+            <!-- Botón en 4 columnas -->
+            <div class="col-md-4 text-center">
+                <a href="#" class="btn btn-red btn-lg w-100 text-white" style="border-radius: 10px;">¡Ingresar Ya!</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/getProductos.js"></script>
+    {% endblock %}

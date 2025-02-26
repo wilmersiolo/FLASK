@@ -1,0 +1,259 @@
+.navbar {
+    background: linear-gradient(145deg, #d32f2f, #b71c1c);
+    padding: 12px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand img {
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5));
+}
+
+.nav-link {
+    color: white !important;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 15px;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+}
+
+.nav-link:hover {
+    color: #FFEB3B !important;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 10px #FFEB3B;
+}
+
+.carrito-btn {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+}
+
+.dropdown-menu {
+    background: linear-gradient(145deg, #d32f2f, #b71c1c);
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-item {
+    color: white;
+    text-transform: uppercase;
+    font-size: 1rem;
+    transition: background 0.3s, color 0.3s;
+}
+
+.dropdown-item:hover {
+    color: #FFEB3B;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+    margin-left: 100px;
+}
+
+.custom-toggler {
+    background-color: #FFEB3B;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.custom-toggler:hover {
+    background-color: #FFC107;
+}
+
+#carouselExampleCaptions {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    height: 500px;
+    border-radius: 10px;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.carousel-title {
+    font-family: 'Anton', sans-serif;
+    color: #FFEB3B;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.carousel-text {
+    color: white;
+    font-size: 1.25rem;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: #FFEB3B;
+}
+
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.btn-carousel-prev, .btn-carousel-next {
+    width: 5%;
+    height: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn-carousel-prev {
+    left: -50px;
+}
+
+.btn-carousel-next {
+    right: -50px;
+}
+
+.card-img-top {
+    height: 250px;
+    max-height: 250px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+
+.btn-warning {
+    font-weight: bold;
+    padding: 12px;
+    background-color: #FFEB3B;
+    border: none;
+    color: black;
+}
+
+.btn-warning:hover {
+    background-color: #f5c500;
+}
+
+.img-fluid {
+    height: 100%;
+    object-fit: cover;
+}
+
+.accordion-button {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.accordion-body {
+    font-size: 1rem;
+    color: #555;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-item {
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.container-fluid.bg-warning {
+    background-color: #ffc107;
+}
+
+.btn-red {
+    background-color: #ff0000;
+    border-color: #343a40;
+}
+
+.btn-red:hover {
+    background-color: #ff0000;
+    border-color: #1d2124;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+#loadingOverlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+footer {
+    color: rgb(5, 5, 5);
+}
+
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #ffc107;
+}
+
+footer h5 {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+footer ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+footer hr {
+    border-top: 2px solid #ffc107;
+    margin: 20px 0;
+}
+
+footer .text-center {
+    font-size: 0.9rem;
+    color: #ccc;
+}

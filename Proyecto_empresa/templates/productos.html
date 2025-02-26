@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos McDonald's</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/logo.svg">
+    <link rel="stylesheet" href="../static/lib/bootstrap.min.css" />
+    <script src="../static/lib/1c6a443bfb.js" crossorigin="anonymous"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="../static/lib/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../static/css/style-nav-bar.css" />
+    <link rel="stylesheet" href="../static/css/style-productos-admin.css"/>
+</head>
+<body>
+    <div id="dashboard">
+        <div id="sidebar" class="sidebar">
+            <button class="toggle-btn btn-outline-dark" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a href="dashboard" class="nav-link">
+                <i class="fas fa-home"></i> <span>Dashboard</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> <span>Pedidos</span>
+            </a>
+            <a href="productos" class="nav-link active">
+                <i class="fas fa-box"></i> <span>Productos</span>
+            </a>
+            <a href="clientes.html" class="nav-link">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </a>
+            <a href="empleados.html" class="nav-link">
+                <i class="fas fa-user-tie"></i> <span>Empleados</span>
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <i class="fas fa-chart-line"></i> <span>Reportes</span>
+            </a>
+            <a href="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+            </a>
+        </div>
+
+        <div class="content p-4">
+            <br><br>
+            <h1>Gestión de Productos</h1>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-dark mb-3" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                    <i class="fas fa-plus"></i> Crear Producto
+                </button>
+                <a href="ingredientes" class="btn btn-outline-danger mb-3"><i class="fas fa-plus"></i> Ingredientes</a>
+
+            </div>
+
+            <div class="table-responsive">
+                <table id="tablaProductos" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio Venta</th>
+                            <th>Precio Oferta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProductosBody">
+                        <!-- Productos dinámicos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Crear Producto -->
+    <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Modal más ancho -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalProductoLabel">Crear Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formProducto" enctype="multipart/form-data">
+                        <!-- Vista previa de la imagen -->
+                        <div class="text-center mb-3">
+                            <img id="previewImagen" src="" alt="Vista previa" class="img-fluid rounded border shadow" style="max-width: 250px; display: none;">
+                        </div>
+
+                        <!-- Input para subir imagen -->
+                        <div class="mb-3">
+                            <label for="imagenProducto" class="form-label fw-bold">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="imagenProducto" accept="image/*" onchange="mostrarVistaPrevia()">
+                        </div>
+
+                        <!-- Nombre y Precio Venta -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control" id="tituloProducto" placeholder="Titulo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="number" class="form-control" id="precioVenta" placeholder="Precio Venta" required>
+                            </div>
+                        </div>
+
+                        <!-- Precio Producción -->
+                        <div class="mb-3">
+                            <input type="number" class="form-control" id="precioProduccion" placeholder="Precio Producción" required>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <textarea class="form-control" id="descripcionProducto" rows="3" placeholder="Descripción" required></textarea>
+                        </div>
+
+                        <!-- Oferta y Precio Oferta en la misma fila -->
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <input type="checkbox" class="form-check-input me-2" id="ofertaProducto" onchange="togglePrecioOferta()">
+                                <label class="form-check-label fw-bold" for="ofertaProducto">Oferta</label>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" id="precioOferta" placeholder="Precio Oferta" disabled>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" id="estadoProducto">
+                                    <option>Seleccione un estado</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-outline-dark">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Producto -->
+    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Modal más ancho -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarProductoLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarProducto" enctype="multipart/form-data">
+                        <input type="hidden" id="editIdProducto">
+                        
+                        <!-- Vista previa de la imagen -->
+                        <div class="text-center mb-3">
+                            <img id="editImagen" src="" alt="Imagen del producto" class="img-fluid rounded border shadow" style="max-width: 250px;">
+                        </div>
+                        
+                        <!-- Input para cambiar imagen -->
+                        <div class="mb-3">
+                            <label for="editNuevaImagen" class="form-label fw-bold">Cambiar Imagen</label>
+                            <input type="file" class="form-control" id="editNuevaImagen" accept="image/*">
+                        </div>
+
+                        <!-- Campos organizados en filas de dos columnas -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTitulo" class="form-label fw-bold">Producto</label>
+                                <input type="text" class="form-control" id="editTitulo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editPrecioVenta" class="form-label fw-bold">Precio Venta</label>
+                                <input type="number" class="form-control" id="editPrecioVenta" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPrecioProduccion" class="form-label fw-bold">Precio Producción</label>
+                                <input type="number" class="form-control" id="editPrecioProduccion" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editFecha" class="form-label fw-bold">Fecha de Creación</label>
+                                <input type="datetime-local" class="form-control" id="editFecha">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDescripcion" class="form-label fw-bold">Descripción</label>
+                            <textarea class="form-control" id="editDescripcion" rows="3" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="editOferta">
+                                    <label class="form-check-label fw-bold" for="editOferta">Oferta</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editPrecioOferta" class="form-label fw-bold">Precio Oferta</label>
+                                <input type="number" class="form-control" id="editPrecioOferta">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-dark" onclick="guardarEdicionProducto()">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <!-- jQuery (requerido por DataTables) -->
+    <script src="../static/lib/jquery-3.6.0.min.js"></script>
+    <script src="../static/lib/jquery.dataTables.min.js"></script>
+    <script src="../static/lib/sweetalert2.js"></script>
+    <script src="../static/lib/bootstrap.js"></script>
+    <script src="../static/js/nav-bar.js"></script>
+    <script src="../static/js/getProductosAdmin.js"></script>
+    <script src="../static/js/createProductosAdmin.js"></script>
+</body>
+</html>

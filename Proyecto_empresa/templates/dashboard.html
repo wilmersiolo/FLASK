@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard McDonald's</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/logo.svg">
+    <link rel="stylesheet" href="../static/lib/bootstrap.min.css">
+    <script src="../static/lib/1c6a443bfb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/lib/dataTables.bootstrap5.min.css">
+    <script src="../static/lib/chart.js"></script>
+    <link rel="stylesheet" href="../static/css/style-nav-bar.css">
+    <style>
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <div id="sidebar" class="sidebar">
+            <button class="toggle-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="dashboard" class="nav-link" aria-current="page">
+                <i class="fas fa-home"></i> <span>Dashboard</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> <span>Pedidos</span>
+            </a>
+            <a href="productos" class="nav-link">
+                <i class="fas fa-box"></i> <span>Productos</span>
+            </a>
+            <a href="clientes.html" class="nav-link">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </a>
+            <a href="empleados.html" class="nav-link">
+                <i class="fas fa-user-tie"></i> <span>Empleados</span>
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <i class="fas fa-chart-line"></i> <span>Reportes</span>
+            </a>
+            <a href="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+            </a>
+        </div>
+        <div class="content" id="content">
+            <br><br>
+            <h1>Bienvenido al Dashboard de McDonald's</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <hr>
+            <h3>Pedidos</h3>
+            <table id="ordersTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Juan Pérez</td><td>$25.00</td><td>Entregado</td></tr>
+                    <tr><td>2</td><td>María López</td><td>$18.50</td><td>En proceso</td></tr>
+                    <tr><td>3</td><td>Carlos Díaz</td><td>$32.75</td><td>Pendiente</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../static/lib/jquery-3.6.0.min.js"></script>
+    <script src="../static/lib/jquery.dataTables.min.js"></script>
+    <script src="../static/lib/dataTables.bootstrap5.min.js"></script>
+    <script src="../static/lib/bootstrap.js"></script>
+    <script src="../static/js/nav-bar-dashboard.js"></script>
+</body>
+</html>

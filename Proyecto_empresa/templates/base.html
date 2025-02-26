@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McDonald's - Menú</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/logo.svg">
+    <!-- Bootstrap 5.3 CSS -->
+    <link rel="stylesheet" href="../static/lib/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2-->
+    <link rel="stylesheet" href="../static/lib/sweetalert2.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../static/img/logo.svg" 
+                    alt="McDonald's" width="50" height="50">
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index"><i class="fas fa-home"></i> Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu"><i class="fas fa-utensils"></i> Menú</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ubicaciones"><i class="fas fa-map-marker-alt"></i> Ubicaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto"><i class="fas fa-envelope"></i> Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login"><i class="fas fa-user"></i> Login</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link carrito-btn" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-shopping-cart"></i> Carrito <span class="badge bg-warning cantidadCarrito"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="carrito">Ver Carrito</a></li>
+                            <li><a class="dropdown-item" href="pagar">Pagar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    {% block contenido %}
+    
+    {% endblock %}
+    
+    <footer class="text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4 d-flex justify-content-center align-items-center">
+                    <img src="static/img/logo.svg" alt="Logo McDonald's" class="img-fluid" >
+                </div>
+
+                <div class="col-md-2 mb-4">
+                    <h5 class="text-black">Sobre Nosotros</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black">Restaurantes</a></li>
+                        <li><a href="#" class="text-black">Quiénes Somos</a></li>
+                        <li><a href="#" class="text-black">Trabaja con nosotros</a></li>
+                        <li><a href="#" class="text-black">Con las familias</a></li>
+                        <li><a href="#" class="text-black">Contacto</a></li>
+                        <li><a href="#" class="text-black">Protección de datos Personales</a></li>
+                        <li><a href="#" class="text-black">Términos y Condiciones Promociones</a></li>
+                        <li><a href="#" class="text-black">Términos y Condiciones MiMcDonald’s</a></li>
+                        <li><a href="#" class="text-black">Política de Cookies</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-2 mb-4">
+                    <h5 class="text-black">Descubre</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black">Cajita Feliz</a></li>
+                        <li><a href="#" class="text-black">Land Roblox</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-2 mb-4">
+                    <h5 class="text-black">Contacto</h5>
+                    <p class="text-black">Sigue disfrutando en nuestras redes sociales:</p>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black">Facebook</a></li>
+                        <li><a href="#" class="text-black">Instagram</a></li>
+                        <li><a href="#" class="text-black">Youtube</a></li>
+                        <li><a href="#" class="text-black">Twitter</a></li>
+                    </ul>
+                    <p class="text-black">O descarga nuestra app y multiplica la diversión:</p>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-black">iOS</a></li>
+                        <li><a href="#" class="text-black">Android</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4" style="border-color: #ffc107;">
+
+            <div class="text-center">
+                <p class="mb-0 text-black">&copy; 2025 McDonald's. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../static/lib/popper.min.js"></script>
+    <script src="../static/lib/bootstrap.js"></script>
+    <script src="../static/lib/sweetalert2.js"></script>
+
+</body>
+</html>
