@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes McDonald's</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/logo.svg">
+    <link rel="stylesheet" href="../static/lib/bootstrap.min.css" />
+    <script src="../static/lib/1c6a443bfb.js" crossorigin="anonymous"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="../static/lib/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../static/css/style-nav-bar.css" />
+    <link rel="stylesheet" href="../static/css/style-productos-admin.css"/>
+</head>
+<body>
+    <div id="dashboard">
+        <div id="sidebar" class="sidebar">
+            <button class="toggle-btn btn-outline-dark" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a href="dashboard" class="nav-link">
+                <i class="fas fa-home"></i> <span>Dashboard</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> <span>Pedidos</span>
+            </a>
+            <a href="productos" class="nav-link active">
+                <i class="fas fa-box"></i> <span>Productos</span>
+            </a>
+            <a href="clientes" class="nav-link">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </a>
+            <a href="empleados" class="nav-link">
+                <i class="fas fa-user-tie"></i> <span>Empleados</span>
+            </a>
+            <a href="sucursales" class="nav-link">
+                <i class="fa-solid fa-store"></i> <span>Sucursales</span>
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <i class="fas fa-chart-line"></i> <span>Reportes</span>
+            </a>
+            <a href="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+            </a>
+        </div>
+
+        <div class="content p-4">
+            <br><br>
+            <h1>Gestión de Clientes</h1>
+            <button class="btn btn-outline-dark mb-3" data-bs-toggle="modal" data-bs-target="#modalCliente">
+                <i class="fas fa-plus"></i> Crear Cliente
+            </button>
+
+            <div class="table-responsive">
+                <table id="tablaClientes" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                            <th>Direccion</th>
+                            <th>Ciudad</th>
+                            <th>Departamento</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientesBody">
+                        <!-- Clientes dinámicos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Crear Cliente -->
+    <div class="modal fade" id="modalCliente" tabindex="-1" aria-labelledby="modalClienteLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalClienteLabel">Registrar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCliente">
+                        
+                        <!-- Pestañas de navegación -->
+                        <ul class="nav nav-tabs" id="ClienteTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="datosCliente-tab" data-bs-toggle="tab" data-bs-target="#datosCliente" type="button" role="tab">
+                                    Datos Personales
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="direccionCliente-tab" data-bs-toggle="tab" data-bs-target="#direccionCliente" type="button" role="tab">
+                                    Dirección de Envío
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-3">
+                            
+                            <!-- Pestaña: Datos Personales -->
+                            <div class="tab-pane fade show active" id="datosCliente" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <input type="text" class="form-control" id="nombreCliente" required placeholder="Nombres">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <input type="text" class="form-control" id="apellidoCliente" required placeholder="Apellidos">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <input type="email" class="form-control" id="emailCliente" required placeholder="Email">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <input type="text" class="form-control" id="telefonoCliente" required placeholder="Teléfono">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pestaña: Dirección de Envío -->
+                            <div class="tab-pane fade" id="direccionCliente" role="tabpanel">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="direccionClienteInput" required placeholder="Dirección">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <input type="text" class="form-control" id="departamentoCliente" required placeholder="Departamento">
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <input type="text" class="form-control" id="ciudadCliente" required placeholder="Ciudad">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer con botón de Guardar -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-info">Guardar Cliente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal para Editar Cliente -->
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarCliente">
+                        <input type="hidden" id="editIdCliente">
+
+                        <!-- Pestañas de navegación -->
+                        <ul class="nav nav-tabs" id="editarClienteTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="editDatosCliente-tab" data-bs-toggle="tab" data-bs-target="#editDatosCliente" type="button" role="tab">
+                                    Datos Personales
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="editDireccionCliente-tab" data-bs-toggle="tab" data-bs-target="#editDireccionCliente" type="button" role="tab">
+                                    Dirección de Envío
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-3">
+                            
+                            <!-- Pestaña: Datos Personales -->
+                            <div class="tab-pane fade show active" id="editDatosCliente" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editNombreCliente" class="form-label fw-bold">Nombre</label>
+                                        <input type="text" class="form-control" id="editNombreCliente" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editApellidoCliente" class="form-label fw-bold">Apellido</label>
+                                        <input type="text" class="form-control" id="editApellidoCliente" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editEmailCliente" class="form-label fw-bold">Email</label>
+                                        <input type="email" class="form-control" id="editEmailCliente" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editTelefonoCliente" class="form-label fw-bold">Teléfono</label>
+                                        <input type="text" class="form-control" id="editTelefonoCliente" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pestaña: Dirección de Envío -->
+                            <div class="tab-pane fade" id="editDireccionCliente" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="editDireccionCliente" class="form-label fw-bold">Dirección</label>
+                                    <input type="text" class="form-control" id="editDireccionClienteInput" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editCiudadCliente" class="form-label fw-bold">Ciudad</label>
+                                        <input type="text" class="form-control" id="editCiudadCliente" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editDepartamentoCliente" class="form-label fw-bold">Departamento</label>
+                                        <input type="text" class="form-control" id="editDepartamentoCliente" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-info" onclick="guardarEdicionCliente()">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery (requerido por DataTables) -->
+    <script src="../static/lib/jquery-3.6.0.min.js"></script>
+    <script src="../static/lib/jquery.dataTables.min.js"></script>
+    <script src="../static/lib/sweetalert2.js"></script>
+    <script src="../static/lib/bootstrap.js"></script>
+    <script src="../static/js/nav-bar.js"></script>
+    <script src="../static/js/getClientesAdmin.js"></script>
+    <script src="../static/js/createClienteAdmin.js"></script>
+</body>
+</html>

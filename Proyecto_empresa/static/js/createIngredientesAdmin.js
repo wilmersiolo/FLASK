@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    cargarProveedores(); // Cargar proveedores en ambos selects
+
     document.getElementById("formIngrediente").addEventListener("submit", function (event) {
         event.preventDefault(); // Evita el envío tradicional del formulario
 
@@ -40,3 +42,31 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// Función para cargar proveedores en ambos selects
+function cargarProveedores() {
+    fetch("/getProveedores")
+        .then(response => response.json())
+        .then(proveedores => {
+            let selects = [
+                document.getElementById("proveedorIngrediente"),
+                document.getElementById("editarProveedorIngrediente")
+            ];
+
+            selects.forEach(select => {
+                if (select) { // Verifica que el select exista
+                    select.innerHTML = '<option value="">Seleccione un proveedor</option>'; // Limpia opciones
+
+                    proveedores.forEach(proveedor => {
+                        let option = document.createElement("option");
+                        option.value = proveedor.idProveedor; // Asigna el id como value
+                        option.textContent = proveedor.nombre; // Muestra el nombre
+                        select.appendChild(option);
+                    });
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error cargando proveedores:", error);
+        });
+}

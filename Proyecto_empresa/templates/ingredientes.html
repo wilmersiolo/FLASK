@@ -15,7 +15,7 @@
 <body>
     <div id="dashboard">
         <div id="sidebar" class="sidebar">
-            <button class="toggle-btn login-btn" onclick="toggleSidebar()">
+            <button class="toggle-btn" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
 
@@ -28,11 +28,14 @@
             <a href="productos" class="nav-link active">
                 <i class="fas fa-box"></i> <span>Productos</span>
             </a>
-            <a href="clientes.html" class="nav-link">
+            <a href="clientes" class="nav-link">
                 <i class="fas fa-users"></i> <span>Clientes</span>
             </a>
-            <a href="empleados.html" class="nav-link">
+            <a href="empleados" class="nav-link">
                 <i class="fas fa-user-tie"></i> <span>Empleados</span>
+            </a>
+            <a href="sucursales" class="nav-link">
+                <i class="fa-solid fa-store"></i> <span>Sucursales</span>
             </a>
             <a href="reportes.html" class="nav-link">
                 <i class="fas fa-chart-line"></i> <span>Reportes</span>
@@ -45,7 +48,7 @@
         <div class="content p-4">
             <br><br>
             <h1>Gestión de Ingredientes</h1>
-            <button class="btn login-btn mb-3" data-bs-toggle="modal" data-bs-target="#modalIngrediente">
+            <button class="btn btn-outline-dark mb-3" data-bs-toggle="modal" data-bs-target="#modalIngrediente">
                 <i class="fas fa-plus"></i> Crear Ingrediente
             </button>
 
@@ -90,9 +93,9 @@
                                 <label for="unidadMedidaIngrediente" class="form-label">Unidad de Medida</label>
                                 <select class="form-control" id="unidadMedidaIngrediente" required>
                                     <option value="">Seleccione una unidad</option>
-                                    <option value="Gramos">Gramos</option>
-                                    <option value="Litros">Litros</option>
-                                    <option value="Unidad">Unidad</option>
+                                    <option value="gr">Gramos</option>
+                                    <option value="ml">Mililitros</option>
+                                    <option value="unidad">Unidad</option>
                                     <option value="Otro">Otro</option>
                                 </select>
                             </div>
@@ -108,10 +111,6 @@
                                 <label for="proveedorIngrediente" class="form-label">Proveedor</label>
                                 <select class="form-control" id="proveedorIngrediente" required>
                                     <option value="">Seleccione un proveedor</option>
-                                    <option value="Proveedor 1">Proveedor 1</option>
-                                    <option value="Proveedor 2">Proveedor 2</option>
-                                    <option value="Proveedor 3">Proveedor 3</option>
-                                    <option value="Otro">Otro</option>
                                 </select>
                             </div>
                         </div>
@@ -130,8 +129,8 @@
                     
                         <!-- Botones -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn login-btn">Guardar</button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-outline-info">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -162,9 +161,9 @@
                                 <label for="editarUnidadMedidaIngrediente" class="form-label">Unidad de Medida</label>
                                 <select class="form-control" id="editarUnidadMedidaIngrediente" required>
                                     <option value="">Seleccione una unidad</option>
-                                    <option value="Gramos">Gramos</option>
-                                    <option value="Litros">Litros</option>
-                                    <option value="Unidad">Unidad</option>
+                                    <option value="gr">Gramos</option>
+                                    <option value="ml">Mililitros</option>
+                                    <option value="unidad">Unidad</option>
                                     <option value="Otro">Otro</option>
                                 </select>
                             </div>
@@ -180,10 +179,6 @@
                                 <label for="editarProveedorIngrediente" class="form-label">Proveedor</label>
                                 <select class="form-control" id="editarProveedorIngrediente" required>
                                     <option value="">Seleccione un proveedor</option>
-                                    <option value="Proveedor 1">Proveedor 1</option>
-                                    <option value="Proveedor 2">Proveedor 2</option>
-                                    <option value="Proveedor 3">Proveedor 3</option>
-                                    <option value="Otro">Otro</option>
                                 </select>
                             </div>
                         </div>
@@ -202,8 +197,8 @@
 
                         <!-- Botones -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn login-btn" onclick="guardarEdicionIngrediente()">Guardar Cambios</button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-outline-info" onclick="guardarEdicionIngrediente()">Guardar Cambios</button>
 
                         </div>
                     </form>

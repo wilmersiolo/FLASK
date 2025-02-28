@@ -21,7 +21,7 @@ def registrarIngrediente():
     try:
         with conexion.cursor() as cursor:
             cursor.execute(
-                "INSERT INTO ingredientes (nombre, unidad_medida, precio_por_unidad, proveedor, fecha_compra, fecha_caducidad) VALUES (%s, %s, %s, %s, %s, %s)",
+                "INSERT INTO ingredientes (nombre, unidad_medida, precio_por_unidad, idProveedor, fecha_compra, fecha_caducidad) VALUES (%s, %s, %s, %s, %s, %s)",
                 (nombreIngrediente, unidadMedidaIngrediente, PrecioIngrediente, proveedorIngrediente, fechaCompraIngrediente, fechaCaducidadIngrediente)
             )
             conexion.commit()
@@ -33,28 +33,40 @@ def registrarIngrediente():
 
 
 def obtener_ingredientes():
-    conexion = obtener_conexion()
-    ingredientes_lista = []
     try:
-        with conexion.cursor() as cursor:
-            cursor.execute("SELECT * FROM ingredientes")
-            ingredientes = cursor.fetchall()
-            for ingrediente in ingredientes:
-                ingredientes_lista.append({
-                    "idIngrediente": ingrediente[0],
-                    "nombre": ingrediente[1],
-                    "unidad_medida": ingrediente[2],
-                    "precio_por_unidad": float(ingrediente[3]),
-                    "proveedor": ingrediente[4],
-                    "fecha_compra": ingrediente[5].strftime('%Y-%m-%d'),
-                    "fecha_caducidad": ingrediente[6].strftime('%Y-%m-%d')
-                })
-    except pymysql.MySQLError as e:
-        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
-    finally:
-        conexion.close()
-    return jsonify(ingredientes_lista)
+        with obtener_conexion() as conexion, conexion.cursor() as cursor:
+            query = """
+                SELECT 
+                    i.idIngrediente, 
+                    i.nombre, 
+                    i.unidad_medida, 
+                    i.precio_por_unidad, 
+                    i.idProveedor, 
+                    p.nombre AS nombre_proveedor, 
+                    i.fecha_compra, 
+                    i.fecha_caducidad
+                FROM ingredientes i
+                LEFT JOIN proveedores p ON i.idProveedor = p.idProveedor;
 
+            """
+            cursor.execute(query)
+            ingredientes = cursor.fetchall()
+
+            ingredientes_lista = [{
+                "idIngrediente": ingrediente[0],
+                "nombre": ingrediente[1],
+                "unidad_medida": ingrediente[2],
+                "precio_por_unidad": float(ingrediente[3]) if ingrediente[3] is not None else 0.0,
+                "idProveedor": ingrediente[4],
+                "nombre_proveedor": ingrediente[5],
+                "fecha_compra": ingrediente[6].strftime('%Y-%m-%d') if ingrediente[6] else None,
+                "fecha_caducidad": ingrediente[7].strftime('%Y-%m-%d') if ingrediente[7] else None
+            } for ingrediente in ingredientes]
+
+            return jsonify(ingredientes_lista)
+
+    except Exception as e:
+        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
 
 def editar_ingrediente():
     conexion = obtener_conexion()
@@ -90,7 +102,7 @@ def editar_ingrediente():
 
         query = """
             UPDATE ingredientes 
-            SET nombre = %s, unidad_medida = %s, precio_por_unidad = %s, proveedor = %s, fecha_compra = %s, fecha_caducidad = %s
+            SET nombre = %s, unidad_medida = %s, precio_por_unidad = %s, idProveedor = %s, fecha_compra = %s, fecha_caducidad = %s
         """
         
 
@@ -111,31 +123,58 @@ def editar_ingrediente():
         conexion.close()
 
         
-def cambiarEstado():
-    """Ruta para cambiar el estado de un producto en la base de datos."""
-    
+def buscar_ingrediente():
+    termino = request.args.get("search", "").strip()
+
+    if not termino:
+        return jsonify({"error": "Debe proporcionar un término de búsqueda"}), 400
+
     conexion = obtener_conexion()
-
     try:
-        data = request.get_json()  # Obtener datos enviados desde JS
-        id_producto = data.get("idProducto")
-        nuevo_estado = data.get("nuevoEstado")  # Recibir el nuevo estado
-
-        if not id_producto or not nuevo_estado:
-            return jsonify({"success": False, "error": "Datos insuficientes"}), 400
-
-        query = "UPDATE productos SET estado = %s WHERE idProducto = %s"
-
         with conexion.cursor() as cursor:
-            cursor.execute(query, (nuevo_estado, id_producto))
-        
-        conexion.commit()
-        return jsonify({"success": True, "nuevoEstado": nuevo_estado})
+            query = """
+                SELECT idIngrediente, nombre, unidad_medida
+                FROM ingredientes 
+                WHERE nombre LIKE %s 
+                OR unidad_medida LIKE %s 
+                OR idProveedor LIKE %s
+            """
+            like_term = f"%{termino}%"
+            cursor.execute(query, (like_term, like_term, like_term))
+            resultados = cursor.fetchall()
 
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+            ingredientes = [{"id": row[0], "nombre": row[1], "unidadMedida": row[2]} for row in resultados]
 
+        return jsonify(ingredientes)
+
+    except pymysql.MySQLError as e:
+        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
     finally:
-        if conexion:
-            conexion.close()
+        conexion.close()
+     
+def buscar_ingrediente_by_id():
+    id_producto = request.args.get("id", "").strip()
 
+    if not id_producto:
+        return jsonify({"error": "Debe proporcionar un ID de producto"}), 400
+
+    conexion = obtener_conexion()
+    try:
+        with conexion.cursor() as cursor:
+            query = """
+                SELECT pi.idIngrediente, i.nombre, pi.cantidadNecesaria, i.unidad_medida
+                FROM productos_ingredientes pi
+                JOIN ingredientes i ON pi.idIngrediente = i.idIngrediente
+                WHERE pi.idProducto = %s
+            """
+            cursor.execute(query, (id_producto,))
+            resultados = cursor.fetchall()
+
+            ingredientes = [{"id": row[0], "nombre": row[1], "cantidad": row[2], "unidadMedida": row[3]} for row in resultados]
+
+        return jsonify(ingredientes)
+
+    except pymysql.MySQLError as e:
+        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
+    finally:
+        conexion.close()

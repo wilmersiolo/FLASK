@@ -14,3 +14,14 @@
 .spinner-container {
     text-align: center;
 }
+.tooltip-lg .tooltip-inner {
+    background-color: #000000 !important; /* Rojo claro */
+    color: white !important; /* Letras blancas */
+    font-size: 1.2rem !important; /* Texto más grande */
+    padding: 10px 15px !important; /* Más espaciado */
+    border-radius: 8px !important; /* Bordes redondeados */
+}
+
+.tooltip-lg.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #000000 !important; /* Color de la flecha */
+}

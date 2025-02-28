@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales McDonald's</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/logo.svg">
+    <link rel="stylesheet" href="../static/lib/bootstrap.min.css" />
+    <script src="../static/lib/1c6a443bfb.js" crossorigin="anonymous"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="../static/lib/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../static/css/style-nav-bar.css" />
+    <link rel="stylesheet" href="../static/css/style-productos-admin.css"/>
+</head>
+<body>
+    <div id="dashboard">
+        <div id="sidebar" class="sidebar">
+            <button class="toggle-btn btn-outline-dark" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a href="dashboard" class="nav-link">
+                <i class="fas fa-home"></i> <span>Dashboard</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="fas fa-shopping-cart"></i> <span>Pedidos</span>
+            </a>
+            <a href="productos" class="nav-link active">
+                <i class="fas fa-box"></i> <span>Productos</span>
+            </a>
+            <a href="clientes" class="nav-link">
+                <i class="fas fa-users"></i> <span>Clientes</span>
+            </a>
+            <a href="empleados" class="nav-link">
+                <i class="fas fa-user-tie"></i> <span>Empleados</span>
+            </a>
+            <a href="sucursales" class="nav-link">
+                <i class="fa-solid fa-store"></i> <span>Sucursales</span>
+            </a>
+            <a href="reportes.html" class="nav-link">
+                <i class="fas fa-chart-line"></i> <span>Reportes</span>
+            </a>
+            <a href="logout" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+            </a>
+        </div>
+
+        <div class="content p-4">
+            <br><br>
+            <h1>Gestión de Sucursales</h1>
+            <button class="btn btn-outline-dark mb-3" data-bs-toggle="modal" data-bs-target="#modalSucursal">
+                <i class="fas fa-plus"></i> Crear Sucursal
+            </button>
+
+            <div class="table-responsive">
+                <table id="tablaSucursales" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Sucursal</th>
+                            <th>Dirección</th>
+                            <th>Telefono</th>
+                            <th>Email</th>
+                            <th>Ciudad</th>
+                            <th>Pais</th>
+                            <th>Departamento</th>
+                            <th>Activo</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaSucursalesBody">
+                        <!-- Sucursales dinámicos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Crear Sucursale -->
+    <div class="modal fade" id="modalSucursal" tabindex="-1" aria-labelledby="modalSucursalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSucursalLabel">Registrar Sucursal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formSucursal">
+                        
+                        <!-- Pestañas de navegación -->
+                        <ul class="nav nav-tabs" id="SucursalTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="datosSucursal-tab" data-bs-toggle="tab" data-bs-target="#datosSucursal" type="button" role="tab">
+                                    Datos Sucursal
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="direccionSucursal-tab" data-bs-toggle="tab" data-bs-target="#direccionSucursal" type="button" role="tab">
+                                    Dirección
+                                </button>
+                            </li>
+                        </ul>
+    
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-3">
+                            
+                            <!-- Pestaña: Datos Sucursal -->
+                            <div class="tab-pane fade show active" id="datosSucursal" role="tabpanel">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="nombreSucursal" required placeholder="Nombre de la Sucursal">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" id="emailSucursal" placeholder="Correo Electrónico">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="telefonoSucursal" placeholder="Teléfono">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" id="passwordSucursal" placeholder="Contraseña">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activoSucursal" class="form-label">Sucursal Activa</label>
+                                    <select class="form-select" id="activoSucursal">
+                                        <option value="1" selected>Sí</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                            </div>
+    
+                            <!-- Pestaña: Dirección -->
+                            <div class="tab-pane fade" id="direccionSucursal" role="tabpanel">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="direccionSucursalInput" required placeholder="Dirección">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="ciudadSucursal" required placeholder="Ciudad">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="departamentoSucursal" required placeholder="Departamento">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="codigoPostalSucursal" required placeholder="Código Postal">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="paisSucursal" required placeholder="País">
+                                </div>
+                            </div>
+    
+                        </div>
+    
+                        <!-- Footer con botón de Guardar -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-info">Guardar Sucursal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <!-- Modal para Editar Sucursal -->
+    <div class="modal fade" id="modalEditarSucursal" tabindex="-1" aria-labelledby="modalEditarSucursalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarSucursalLabel">Editar Sucursal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarSucursal">
+                        <input type="hidden" id="editIdSucursal">
+
+                        <!-- Pestañas de navegación -->
+                        <ul class="nav nav-tabs" id="editarSucursalTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="editDatosSucursal-tab" data-bs-toggle="tab" data-bs-target="#editDatosSucursal" type="button" role="tab">
+                                    Datos Sucursal
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="editDireccionSucursal-tab" data-bs-toggle="tab" data-bs-target="#editDireccionSucursal" type="button" role="tab">
+                                    Dirección de Envío
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Contenido de las pestañas -->
+                        <div class="tab-content mt-3">
+                            
+                            <!-- Pestaña: Datos Sucursal -->
+                            <div class="tab-pane fade show active" id="editDatosSucursal" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editNombreSucursal" class="form-label fw-bold">Nombre</label>
+                                        <input type="text" class="form-control" id="editNombreSucursal" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editEmailSucursal" class="form-label fw-bold">Email</label>
+                                        <input type="email" class="form-control" id="editEmailSucursal" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editTelefonoSucursal" class="form-label fw-bold">Teléfono</label>
+                                        <input type="text" class="form-control" id="editTelefonoSucursal" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editActivoSucursal" class="form-label fw-bold">Activo</label>
+                                        <select class="form-control" id="editActivoSucursal" required>
+                                            <option value="1">Sí</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pestaña: Dirección de Envío -->
+                            <div class="tab-pane fade" id="editDireccionSucursal" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="editDireccionSucursalInput" class="form-label fw-bold">Dirección</label>
+                                    <input type="text" class="form-control" id="editDireccionSucursalInput" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editCiudadSucursal" class="form-label fw-bold">Ciudad</label>
+                                        <input type="text" class="form-control" id="editCiudadSucursal" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editEstadoSucursal" class="form-label fw-bold">Estado</label>
+                                        <input type="text" class="form-control" id="editEstadoSucursal" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editCodigoPostalSucursal" class="form-label fw-bold">Código Postal</label>
+                                        <input type="text" class="form-control" id="editCodigoPostalSucursal" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="editPaisSucursal" class="form-label fw-bold">País</label>
+                                        <input type="text" class="form-control" id="editPaisSucursal" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-info" onclick="guardarEdicionSucursal()">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- jQuery (requerido por DataTables) -->
+    <script src="../static/lib/jquery-3.6.0.min.js"></script>
+    <script src="../static/lib/jquery.dataTables.min.js"></script>
+    <script src="../static/lib/sweetalert2.js"></script>
+    <script src="../static/lib/bootstrap.js"></script>
+    <script src="../static/js/nav-bar.js"></script>
+    <script src="../static/js/getSucursalesAdmin.js"></script>
+    <script src="../static/js/createSucursalAdmin.js"></script>
+</body>
+</html>

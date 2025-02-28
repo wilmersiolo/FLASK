@@ -47,9 +47,13 @@ function mostrarProductosEnTabla(productos) {
 
         // Determinar el botón según el estado, enviando también el estado actual
         const botonEstado = producto.estado === "Inactivo"
-            ? `<button class="btn btn-success btn-sm" onclick="cambiarEstado(${producto.idProducto}, '${estadoTexto}')">✔️</button>`
-            : `<button class="btn btn-danger btn-sm" onclick="cambiarEstado(${producto.idProducto}, '${estadoTexto}')">❌</button>`;
+            ? `<button class="btn btn-outline-info btn-sm" onclick="cambiarEstado(${producto.idProducto}, '${estadoTexto}')" 
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-lg" title="Activar producto">✔️</button>`
+            : `<button class="btn btn-outline-danger btn-sm" onclick="cambiarEstado(${producto.idProducto}, '${estadoTexto}')" 
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-lg" title="Desactivar producto">❌</button>`;
+        
 
+        
         tabla.row.add([
             index + 1,
             producto.titulo,
@@ -57,7 +61,7 @@ function mostrarProductosEnTabla(productos) {
             `$${producto.precioVenta.toFixed(2)}`,
             producto.oferta ? `$${producto.precioOferta.toFixed(2)}` : `$${producto.precioVenta.toFixed(2)}`,
             estadoTexto, // Estado visible en la tabla
-            `<button class="btn btn-warning btn-sm" onclick="editarProducto(${producto.idProducto})">✏️</button>
+            `<button class="btn btn-outline-info btn-sm" onclick="editarProducto(${producto.idProducto})">✏️</button>
              ${botonEstado}` // Botón dinámico con estado incluido
         ]);
     });
@@ -144,6 +148,7 @@ async function editarProducto(idProducto) {
             reader.readAsDataURL(file);
         }
     });
+    ingredientesEditHandler.cargarIngredientesEdit(idProducto);
 
     mostrarSpinner(false);
     // Mostrar el modal
@@ -167,6 +172,14 @@ async function guardarEdicionProducto() {
     if (nuevaImagen) {
         formDataa.append("nuevaImagen", nuevaImagen);
     }
+
+    // Convertir los ingredientes seleccionados en JSON
+    let ingredientesArray = Array.from(ingredientesEditHandler.ingredientesSeleccionados.entries()).map(([id, data]) => ({
+        id: id,
+        cantidad: data.cantidad
+    }));
+
+    formDataa.append("ingredientes", JSON.stringify(ingredientesArray));
 
     try {
         // Mostrar un spinner con SweetAlert2 mientras se actualiza el producto
@@ -268,3 +281,97 @@ async function cambiarEstado(idProducto, estadoActual) {
         });
     }
 }
+
+const ingredientesEditHandler = {
+    ingredientesSeleccionados: new Map(),
+
+    async buscarIngrediente() {
+        const input = document.getElementById("buscadorIngredientesEdit").value.trim();
+        const lista = document.getElementById("listaIngredientesEdit");
+
+        if (input.length === 0) {
+            lista.innerHTML = "";
+            return;
+        }
+
+        try {
+            const response = await fetch(`/getIngrediente?search=${input}`);
+            const ingredientes = await response.json();
+
+            lista.innerHTML = "";
+            const fragment = document.createDocumentFragment();
+
+            ingredientes.forEach(({ id, nombre, unidadMedida }) => {
+                const item = document.createElement("button");
+                item.className = "list-group-item list-group-item-action";
+                item.textContent = `${nombre} (${unidadMedida})`;
+                item.onclick = () => ingredientesEditHandler.agregarIngrediente(id, nombre, unidadMedida);
+                fragment.appendChild(item);
+            });
+
+            lista.appendChild(fragment);
+        } catch (error) {
+            console.error("Error al buscar ingredientes:", error);
+        }
+    },
+
+    agregarIngrediente(id, nombre, unidadMedida) {
+        if (!this.ingredientesSeleccionados.has(id)) {
+            this.ingredientesSeleccionados.set(id, { nombre, unidadMedida, cantidad: 1 });
+            this.renderIngredientes();
+        }
+        document.getElementById("listaIngredientesEdit").innerHTML = "";
+    },
+
+    actualizarCantidad(id, nuevaCantidad) {
+        if (this.ingredientesSeleccionados.has(id)) {
+            this.ingredientesSeleccionados.get(id).cantidad = nuevaCantidad;
+        }
+    },
+
+    eliminarIngrediente(id) {
+        this.ingredientesSeleccionados.delete(id);
+        this.renderIngredientes();
+    },
+
+    renderIngredientes() {
+        const contenedor = document.getElementById("ingredientesSeleccionadosEdit");
+        contenedor.innerHTML = "";
+
+        this.ingredientesSeleccionados.forEach(({ nombre, unidadMedida, cantidad }, id) => {
+            const badge = document.createElement("span");
+            badge.className = "badge bg-primary p-2 me-2 d-flex align-items-center";
+            badge.dataset.id = id;
+
+            badge.innerHTML = `
+                ${nombre} (${unidadMedida}) 
+                <input type="number" class="form-control ms-2 me-2" value="${cantidad}" min="1" style="width: 60px;" 
+                    onchange="ingredientesEditHandler.actualizarCantidad(${id}, this.value)">
+                <button type="button" class="btn-close btn-close-white" aria-label="Eliminar" 
+                    onclick="ingredientesEditHandler.eliminarIngrediente(${id})">
+                </button>
+            `;
+
+            contenedor.appendChild(badge);
+        });
+    },
+
+    async cargarIngredientesEdit(idProducto) {
+        try {
+            const response = await fetch(`/getIngredientesProducto?id=${idProducto}`);
+            const ingredientes = await response.json();
+    
+            this.ingredientesSeleccionados.clear();
+            ingredientes.forEach(({ id, nombre, unidadMedida, cantidad }) => {
+                this.ingredientesSeleccionados.set(id, { nombre, unidadMedida, cantidad });
+            });
+    
+            this.renderIngredientes();
+        } catch (error) {
+            console.error("Error al cargar ingredientes del producto:", error);
+        }
+    }
+};
+
+// Evento de búsqueda en tiempo real para edición
+document.getElementById("buscadorIngredientesEdit").addEventListener("input", () => ingredientesEditHandler.buscarIngrediente());

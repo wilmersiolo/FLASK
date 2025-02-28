@@ -49,10 +49,10 @@ function mostrarIngredientesEnTabla(ingredientes) {
             ingrediente.nombre,
             ingrediente.unidad_medida,
             `$${ingrediente.precio_por_unidad.toFixed(2)}`,
-            ingrediente.proveedor,
+            ingrediente.nombre_proveedor,
             ingrediente.fecha_compra,
             ingrediente.fecha_caducidad,
-            `<button class="btn btn-warning btn-sm" onclick="editarIngrediente(${ingrediente.idIngrediente})">✏️</button>`
+            `<button class="btn btn-outline-info btn-sm" onclick="editarIngrediente(${ingrediente.idIngrediente})">✏️</button>`
         ]);
     });
 
@@ -81,6 +81,9 @@ $(document).ready(function () {
             }
         }
     });
+
+    // Agregar margen inferior al input de búsqueda
+    $('.dataTables_filter').addClass('mb-3');
 });
 
 
@@ -114,7 +117,7 @@ async function editarIngrediente(idIngrediente) {
     document.getElementById('editarNombreIngrediente').value = ingrediente.nombre;
     document.getElementById('editarUnidadMedidaIngrediente').value = ingrediente.unidad_medida;
     document.getElementById('editarPrecioIngrediente').value = ingrediente.precio_por_unidad;
-    document.getElementById('editarProveedorIngrediente').value = ingrediente.proveedor;
+    document.getElementById('editarProveedorIngrediente').value = ingrediente.idProveedor;
     document.getElementById('editarFechaCompraIngrediente').value = ingrediente.fecha_compra;
     document.getElementById('editarFechaCaducidadIngrediente').value = ingrediente.fecha_caducidad;
 

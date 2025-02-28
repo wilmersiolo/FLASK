@@ -1,7 +1,7 @@
 function mostrarVistaPrevia() {
     const input = document.getElementById('imagenProducto');
     const imgPreview = document.getElementById('previewImagen');
-    
+
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -36,6 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("ofertaProducto", document.getElementById("ofertaProducto").checked ? 1 : 0);
         formData.append("precioOferta", document.getElementById("precioOferta").value);
         formData.append("estadoProducto", document.getElementById("estadoProducto").value);
+
+        // 🔹 Enviar ingredientes seleccionados como JSON
+        const ingredientesArray = Array.from(ingredientesHandler.ingredientesSeleccionados.entries()).map(([id, { cantidad }]) => ({
+            id,
+            cantidad: parseInt(cantidad) || 1 // Convertimos cantidad a número
+        }));
+        
+        formData.append("ingredientes", JSON.stringify(ingredientesArray));
+        
+        
 
         fetch("/registrarProducto", {
             method: "POST",

@@ -1,5 +1,6 @@
 from flask import request, jsonify, current_app
 import pymysql
+import json
 from bd import obtener_conexion
 import os
 from werkzeug.utils import secure_filename
@@ -52,7 +53,7 @@ def editar_producto():
     oferta = request.form.get("oferta") == '1'
     precioOferta = request.form.get("precioOferta")
     fechaCreacion = request.form.get("fechaCreacion")
-
+    ingredientes_json = request.form.get("ingredientes")  # Recibe JSON de ingredientes
     if not idProducto or not titulo or not descripcion or not precioVenta or not precioProduccion:
         return jsonify({"error": "Faltan datos obligatorios"}), 400
 
@@ -63,23 +64,21 @@ def editar_producto():
             producto = cursor.fetchone()
             imagen_actual = producto[0] if producto else None  # Accede a la primera posición de la tupla
 
-
-            # Si hay nueva imagen, reemplazar la anterior
+            # Manejo de imagen
+            nueva_imagen_nombre = imagen_actual  # Mantener la imagen anterior si no hay nueva
             if nueva_imagen and allowed_file(nueva_imagen.filename):
                 filename = secure_filename(nueva_imagen.filename)
                 filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
 
                 # Eliminar la imagen anterior si existe
                 if imagen_actual:
-                    imagen_antigua_path = os.path.join(imagen_actual)
+                    imagen_antigua_path = os.path.join(current_app.config["UPLOAD_FOLDER"], imagen_actual)
                     if os.path.exists(imagen_antigua_path):
                         os.remove(imagen_antigua_path)
 
                 # Guardar la nueva imagen
                 nueva_imagen.save(filepath)
-                nueva_imagen_nombre = filepath.replace("\\", "/")
-            else:
-                nueva_imagen_nombre = imagen_actual  # Mantener la imagen anterior si no hay nueva
+                nueva_imagen_nombre = filename  # Guardar solo el nombre del archivo
 
             # Actualizar los datos del producto
             query = """
@@ -91,15 +90,33 @@ def editar_producto():
             values = [titulo, descripcion, precioVenta, precioProduccion, oferta, precioOferta, fechaCreacion, nueva_imagen_nombre, idProducto]
             
             cursor.execute(query, tuple(values))
+
+            # Si hay ingredientes, actualizar la tabla `productos_ingredientes`
+            if ingredientes_json:
+                ingredientes = json.loads(ingredientes_json)
+
+                # Eliminar ingredientes existentes
+                cursor.execute("DELETE FROM productos_ingredientes WHERE idProducto = %s", (idProducto,))
+
+                # Insertar los nuevos ingredientes
+                for ing in ingredientes:
+                    query_ingrediente = """
+                        INSERT INTO productos_ingredientes (idProducto, idIngrediente, cantidadNecesaria)
+                        VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(query_ingrediente, (idProducto, ing["id"], ing["cantidad"]))
+
             conexion.commit()
 
         return jsonify({"success": True, "message": "Producto actualizado correctamente"})
 
     except pymysql.MySQLError as e:
-        return jsonify({"error": str(e)}), 500
-
+        return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
+    except json.JSONDecodeError:
+        return jsonify({"error": "Formato de ingredientes inválido"}), 400
     finally:
         conexion.close()
+
 
         
 def cambiarEstado():
@@ -131,25 +148,21 @@ def cambiarEstado():
             conexion.close()
 
 
-
 def registrarProducto():
+    # Verificar que se envió la imagen
     if "imagenProducto" not in request.files:
         return jsonify({"error": "No se envió ninguna imagen"}), 400
 
     file = request.files["imagenProducto"]
-
     if file.filename == "":
         return jsonify({"error": "Nombre de archivo vacío"}), 400
 
+    # Validar imagen y guardar en servidor
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)  # Evita problemas con nombres de archivos
+        filename = secure_filename(file.filename)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
-
-        # Guardar la imagen en el directorio correcto
         file.save(filepath)
-
-        # Guardar solo la ruta relativa
-        imagenProducto = f"{UPLOAD_FOLDER}/{filename}"
+        imagenProducto = f"{UPLOAD_FOLDER}/{filename}"  # Ruta relativa
     else:
         return jsonify({"error": "Formato de imagen no permitido"}), 400
 
@@ -162,16 +175,38 @@ def registrarProducto():
     precioOferta = request.form.get("precioOferta")
     estadoProducto = request.form.get("estadoProducto")
 
+    # Validar que no falten datos
     if not tituloProducto or not precioVenta or not precioProduccion or not descripcionProducto or not ofertaProducto or not estadoProducto:
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
+    # Convertir ingredientes a lista de diccionarios
+    try:
+        ingredientes_json = request.form.get("ingredientes", "[]")  # Recibe como string
+        ingredientes = json.loads(ingredientes_json) if ingredientes_json else []
+        
+        if not all("id" in ing and "cantidad" in ing for ing in ingredientes):
+            return jsonify({"error": "Cada ingrediente debe contener 'id' y 'cantidad'."}), 400
+    except json.JSONDecodeError:
+        return jsonify({"error": "Formato de ingredientes inválido"}), 400
+
+
+    # Insertar en la base de datos
     conexion = obtener_conexion()
     try:
         with conexion.cursor() as cursor:
+            # Insertar producto
             cursor.execute(
                 "INSERT INTO productos (img, titulo, precioVenta, precioProduccion, descripcion, oferta, precioOferta, estado) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                 (imagenProducto, tituloProducto, precioVenta, precioProduccion, descripcionProducto, ofertaProducto, precioOferta, estadoProducto)
             )
+            idProducto = cursor.lastrowid  # Obtener el ID generado
+
+            # Insertar ingredientes si hay
+            if ingredientes:
+                query_ingredientes = "INSERT INTO productos_ingredientes (idProducto, idIngrediente, cantidadNecesaria) VALUES (%s, %s, %s)"
+                valores_ingredientes = [(idProducto, ing["id"], ing["cantidad"]) for ing in ingredientes]
+                cursor.executemany(query_ingredientes, valores_ingredientes)
+
             conexion.commit()
             return jsonify({"mensaje": "Producto registrado exitosamente"}), 201
     except pymysql.MySQLError as e:

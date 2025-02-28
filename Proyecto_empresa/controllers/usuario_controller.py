@@ -42,13 +42,13 @@ def validar_login():
     conexion = obtener_conexion()
     try:
         with conexion.cursor() as cursor:
-            cursor.execute("SELECT idUsuario, nombre, password FROM usuarios WHERE email = %s", (email,))
+            cursor.execute("SELECT idUsuario, rol, password FROM usuarios WHERE email = %s", (email,))
             usuario = cursor.fetchone()
             if not usuario or not check_password_hash(usuario[2], password):
                 return jsonify({"error": "Usuario o contraseña incorrectos"}), 401
             
             session["usuario_id"] = usuario[0]
-            session["nombre"] = usuario[1]
+            session["rol"] = usuario[1]
             return jsonify({"mensaje": "Inicio de sesión exitoso"}), 200
     except pymysql.MySQLError as e:
         return jsonify({"error": f"Error en la base de datos: {str(e)}"}), 500
